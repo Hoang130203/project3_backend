@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>9072c2dd-bb4c-496a-848f-ee619f1ceee0</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+    <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Protos\auth.proto" />
+    <None Remove="Protos\connection.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Carter" Version="8.1.0" />
+	  <PackageReference Include="Grpc.AspNetCore" Version="2.67.0" />
+	  <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="Scrutor" Version="5.0.2" />
+    <PackageReference Include="Serilog" Version="4.1.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.8.16" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AuthService.Application\AuthService.Application.csproj" />
+    <ProjectReference Include="..\AuthService.Domain\AuthService.Domain.csproj" />
+    <ProjectReference Include="..\AuthService.Infrastructure\AuthService.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\auth.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\connection.proto" GrpcServices="Server" />
+  </ItemGroup>
+
+</Project>

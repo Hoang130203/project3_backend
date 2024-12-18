@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option csharp_namespace = "PostService.Protos";
+
+package auth;
+
+service ConnectionServiceGrpc {
+  rpc GetUserConnections(UserConnectionsRequest) returns (UserConnectionsResponse);
+}
+
+message UserConnectionsRequest {
+  string user_id = 1;
+}
+
+message UserConnectionsResponse {
+  repeated string friend_ids = 1;
+  repeated string group_ids = 2;
+}

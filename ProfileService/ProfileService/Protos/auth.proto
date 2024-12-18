@@ -1,0 +1,41 @@
+// auth.proto
+syntax = "proto3";
+
+option csharp_namespace = "ApiGateway.Proto";
+package auth;
+
+service AuthServiceGrpc {
+  // Validate JWT token
+  rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
+  
+  // Check system permission
+  rpc CheckSystemPermission(SystemPermissionRequest) returns (PermissionResponse);
+  
+  // Check group permission  
+  rpc CheckGroupPermission(GroupPermissionRequest) returns (PermissionResponse);
+}
+
+message ValidateTokenRequest {
+  string token = 1;
+}
+
+message ValidateTokenResponse {
+  bool is_valid = 1;
+  string user_id = 2;
+  string user_type = 3;
+}
+
+message SystemPermissionRequest {
+  string user_id = 1; 
+  string permission = 2;
+}
+
+message GroupPermissionRequest {
+  string user_id = 1;
+  string group_id = 2;
+  string permission = 3;
+}
+
+message PermissionResponse {
+  bool is_allowed = 1;
+}

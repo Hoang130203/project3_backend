@@ -1,0 +1,169 @@
+services:
+  authdb:
+    container_name: authdb
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123
+    ports:
+      - "1436:1433"
+    restart: always
+    volumes:
+      # - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - sqlserver_data:/var/opt/mssql
+  messagebroker:
+    container_name: messagebroker
+    hostname: socialapp-mq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    restart: always
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+  postdb:
+    container_name: postdb
+    ports:
+      - "27018:27017"
+    restart: always
+    volumes:
+      - postdb_data:/data/db
+  profiledb:
+    container_name: profiledb
+    ports:
+      - "27019:27017"
+    restart: always
+    volumes:
+      - profiledb_data:/data/db
+  messagedb:
+    container_name: messagedb
+    ports:
+        - "27020:27017"
+    restart: always
+    volumes:
+      - messagedb_data:/data/db
+  distributedcache:
+    container_name: distributedcache
+    restart: always
+    ports:
+      - "6375:6379"
+  authservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTP_PORTS=5001
+      # - ASPNETCORE_URLS=http://+:8080
+      # - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Database=Server=authdb;Database=AuthDb;User Id=sa;Password=Password123;Encrypt=False;TrustServerCertificate=True
+      - jwt__secret=9095a623-a23a-481a-aa0c-e0ad96edc103
+      - jwt__expiryMinutes=60
+      - MessageBroker__Host=amqp://socialapp-mq:5672
+      - MessageBroker__UserName=guest
+      - MessageBroker__Password=guest
+    depends_on:
+      - authdb
+      - messagebroker
+    ports:
+      - "4040:8080"
+      - "5001:5001"
+    #   - "4041:8081"
+    # volumes:
+    #   - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+    #   - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+  fileservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      # - ASPNETCORE_HTTPS_PORTS=8081
+      - FileService__StoragePath=app/uploads
+      - FileService__BaseUrl=/files
+      - FileService__MaxFileSize=152428800
+      - FileService__AllowedExtensions__0=.jpg
+      - FileService__AllowedExtensions__1=.jpeg
+      - FileService__AllowedExtensions__2=.png
+      - FileService__AllowedExtensions__3=.gif
+      - FileService__AllowedExtensions__4=.pdf
+      - FileService__AllowedExtensions__5=.doc
+      - FileService__AllowedExtensions__6=.docx
+      - FileService__AllowedExtensions__7=.mp4
+      - FileService__AllowedExtensions__8=.xlsx
+      - FileService__AllowedExtensions__9=.webp
+      - FileService__AllowedExtensions__10=.mkv
+      - FileService__AllowedExtensions__11=.txt
+      - GoogleDrive__CredentialsPath=/app/credentials.json
+      - GoogleDrive__FolderId=1a4gN4xer3Q7bF4rZxdQe1c9UDtMyiMts
+    ports:
+      - "4050:8080"
+      # - "4051:8081"
+    depends_on:
+      - messagebroker
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - fileservice_uploads:/app/uploads
+  postservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - MongoDbSettings__ConnectionString=mongodb://postdb:27017
+      - MongoDbSettings__DatabaseName=PostServiceDb
+    ports:
+      - "4060:8080"
+    #   - "4061:8081"
+    # volumes:
+    #   - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+    #   - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+  apigateway:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      # - ASPNETCORE_HTTPS_PORTS=8081
+    depends_on:
+      - authservice
+      - fileservice
+      - postservice
+    ports:
+      - "4070:8080"
+    #   - "4071:8081"
+    # volumes:
+    #   - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+    #   - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+  profileservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      # - ASPNETCORE_HTTPS_PORTS=8081
+    ports:
+      - "4080:8080"
+      - "5002:5001"
+    depends_on:
+        - authservice
+        - fileservice
+        - postservice
+        - messagebroker
+    # volumes:
+    #   - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+    #   - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+  messageservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      # - ASPNETCORE_HTTPS_PORTS=8081
+    ports:
+      - "4090:8080"
+      # - "8081"
+    # volumes:
+    #   - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+    #   - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+volumes:
+  sqlserver_data:    
+  rabbitmq_data:  
+  postdb_data:
+  fileservice_uploads:
+  profiledb_data:
+  messagedb_data:
+
+
+

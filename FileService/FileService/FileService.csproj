@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>4cee0e33-45f4-4710-9cc6-11c1b1aec22d</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Protos\file_service.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Apis.Drive.v3" Version="1.68.0.3601" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.67.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\file_service.proto" GrpcServices="Server" />
+  </ItemGroup>
+
+</Project>

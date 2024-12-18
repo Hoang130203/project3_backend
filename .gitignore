@@ -1,0 +1,29 @@
+# Thư mục obj
+# src/Aims.Application/obj/
+# src/Aims.Api/obj/
+# src/Aims.Infrastructure/obj/
+# src/Aims.Domain/obj/
+# src/InterbankSubsystem/obj/
+# tests/Aims.Application.Tests/obj/
+# tests/Aims.Api.Tests/obj/
+# tests/Aims.Infrastructure.Tests/obj/
+# tests/Aims.Domain.Tests/obj/
+obj/
+# Thư mục bin (chứa các file build output)
+bin/
+
+# File cấu hình user-specific
+*.user
+*.suo
+
+# File tạm thời
+*.tmp
+*.log
+*.vspscc
+.vscode/
+
+# File khóa
+#*.lock
+
+# Thư mục ẩn của Visual Studio
+.vs/

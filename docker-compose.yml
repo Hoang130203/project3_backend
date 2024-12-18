@@ -1,0 +1,54 @@
+services:
+  authdb:
+    image: mcr.microsoft.com/mssql/server
+  messagebroker:
+    image: rabbitmq:management
+  postdb:
+    image: mongo
+  profiledb:
+    image: mongo
+  messagedb:
+    image: mongo
+  distributedcache:
+    image: redis
+
+  authservice:
+    image: ${DOCKER_REGISTRY-}authservice
+    build:
+      context: .
+      dockerfile: Auth/AuthService/Dockerfile
+
+  fileservice:
+    image: ${DOCKER_REGISTRY-}fileservice
+    build:
+      context: .
+      dockerfile: FileService/FileService/Dockerfile
+
+
+  postservice:
+    image: ${DOCKER_REGISTRY-}postservice
+    build:
+      context: .
+      dockerfile: PostService/PostService/Dockerfile
+
+
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: .
+      dockerfile: ApiGateway/ApiGateway/Dockerfile
+
+
+  profileservice:
+    image: ${DOCKER_REGISTRY-}profileservice
+    build:
+      context: .
+      dockerfile: ProfileService/ProfileService/Dockerfile
+
+
+  messageservice:
+    image: ${DOCKER_REGISTRY-}messageservice
+    build:
+      context: .
+      dockerfile: MessageService/MessageService/Dockerfile
+

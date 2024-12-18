@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>a80a248e-da75-460b-b323-37c95a2a5b61</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+    <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Protos\auth.proto" />
+    <None Remove="Protos\connection.proto" />
+    <None Remove="Protos\profile.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Grpc.AspNetCore" Version="2.67.0" />
+	<PackageReference Include="Grpc.Tools" Version="2.68.1">
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.11" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="MongoDB.Driver" Version="3.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\SocialAppObjects\SocialAppObjects.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\auth.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\connection.proto">
+      <GrpcServices>Client</GrpcServices>
+    </Protobuf>
+    <Protobuf Include="Protos\profile.proto">
+      <GrpcServices>Client</GrpcServices>
+    </Protobuf>
+  </ItemGroup>
+
+</Project>

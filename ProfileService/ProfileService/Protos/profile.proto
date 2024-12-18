@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+option csharp_namespace = "ProfileService.Proto";
+
+package profile;
+
+service ProfileServiceGrpc {
+  // Basic info retrieval
+  rpc GetSubInfo (SubInfoRequest) returns (SubInfoResponse);
+  rpc GetMultipleSubInfo (MultipleSubInfoRequest) returns (MultipleSubInfoResponse);
+  
+  // Profile CRUD operations
+  rpc GetUserProfile (ProfileRequest) returns (UserProfileResponse);
+  rpc CreateUserProfile (CreateProfileRequest) returns (UserProfileResponse);
+  rpc UpdateUserProfile (UpdateProfileRequest) returns (UserProfileResponse);
+  rpc DeleteUserProfile (ProfileRequest) returns (DeleteResponse);
+  
+  // Group profile operations
+  rpc GetGroupInfo (GroupInfoRequest) returns (GroupInfoResponse);
+  rpc UpdateGroupInfo (UpdateGroupInfoRequest) returns (GroupInfoResponse);
+  rpc DeleteGroupInfo (GroupInfoRequest) returns (DeleteResponse);
+}
+
+message SubInfoRequest {
+  string id = 1;
+}
+
+message SubInfoResponse {
+  string id = 1;
+  string name = 2;
+  string avatar_url = 3;
+}
+
+message MultipleSubInfoRequest {
+  repeated string ids = 1;
+}
+
+message MultipleSubInfoResponse {
+  repeated SubInfoResponse sub_infos = 1;
+}
+
+message ProfileRequest {
+  string user_id = 1;
+}
+
+message UserProfileResponse {
+  string id = 1;
+  string email = 2;
+  string full_name = 3;
+  string avatar_url = 4;
+  string profile_background_url = 5;
+  string bio = 6;
+  bool is_male = 7;
+  string location = 8;
+  string website = 9;
+  string phone = 10;
+  string marital_status = 11;
+  string created_at = 12;
+  string updated_at = 13;
+}
+
+message CreateProfileRequest {
+  string id = 1;
+  string email = 2;
+  string full_name = 3;
+  string avatar_url = 4;
+  string profile_background_url = 5;
+  string bio = 6;
+  bool is_male = 7;
+  string location = 8;
+  string website = 9;
+  string phone = 10;
+  string marital_status = 11;
+}
+
+message UpdateProfileRequest {
+  string id = 1;
+  optional string email = 2;
+  optional string full_name = 3;
+  optional string avatar_url = 4;
+  optional string profile_background_url = 5;
+  optional string bio = 6;
+  optional bool is_male = 7;
+  optional string location = 8;
+  optional string website = 9;
+  optional string phone = 10;
+  optional string marital_status = 11;
+}
+
+message GroupInfoRequest {
+  string group_id = 1;
+}
+
+message GroupInfoResponse {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string owner_id = 4;
+  string owner_name = 5;
+  string group_picture_url = 6;
+  string group_background_url = 7;
+  string created_at = 8;
+  string updated_at = 9;
+  string visibility = 10;
+  bool is_deleted = 11;
+  bool is_locked = 12;
+}
+
+message UpdateGroupInfoRequest {
+  string id = 1;
+  optional string name = 2;
+  optional string description = 3;
+  optional string group_picture_url = 4;
+  optional string group_background_url = 5;
+  optional string visibility = 6;
+  optional bool is_locked = 7;
+}
+
+message DeleteResponse {
+  bool success = 1;
+  string message = 2;
+}
